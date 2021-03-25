@@ -1,5 +1,6 @@
 
 
+
 <!DOCTYPE html>
 <html lang="en" >
 
@@ -15,7 +16,7 @@
 <link rel="mask-icon" type="" href="https://cpwebassets.codepen.io/assets/favicon/logo-pin-8f3771b1072e3c38bd662872f6b673a722f4b3ca2421637d5596661b4e2132cc.svg" color="#111" />
 
 
-  <title>CodePen - 2125-3</title>
+  <title>CodePen - 2126-3</title>
   
   
   
@@ -34,8 +35,12 @@
 </head>
 
 <body translate="no" >
-  <div>
-  Bot Count: <span id="botCount">0</span> Deaths: <span id="deaths">0</span> time: <span id="theTime">0</span>
+  <audio controls id="smack">
+  <source src="https://math.seattleacademy.org/garyanderson/snd/smack.wav" type="audio/wav">
+</audio>
+
+<div>
+  Bot Count: <span id="botCount">0</span> Deaths: <span id="deaths">0</span>
   <button id="resetBots">Reset Bots</button>
 </div>
 <canvas id="myCanvas" width="600" height="300"></canvas>
@@ -44,7 +49,7 @@
   
       <script id="rendered-js" >
 console.clear();
-let timer = 0;
+const smacksnd = document.getElementById("smack");
 const c = document.getElementById("myCanvas");
 const ctx = c.getContext("2d");
 let bots = [];
@@ -53,12 +58,13 @@ function makeBot() {
   bot.r = 10 + Math.random() * 5;
   bot.x = (c.width - 2 * bot.r) * Math.random() + bot.r;
   bot.y = (c.height - 2 * bot.r) * Math.random() + bot.r;
+  
 
   //bot.theta= -Math.PI/4;
   bot.dx = Math.random() * 2 - 1;
   bot.dy = Math.random() * 2 - 1;
   bot.theta = Math.atan2(bot.dy, bot.dx);
-  bot.v = (bot.dx + bot.dy) / 2;
+  bot.v = (bot.dx + bot.dy)/2;
   bot.vl = 1;
   bot.vr = 1;
   return bot;
@@ -88,10 +94,6 @@ function drawBot(bot) {
 }
 
 function moveBot(bot) {
-  timer = timer + 1;
-    let theTime = document.getElementById("theTime");
-  theTime.innerHTML = timer;
-  
   bot.x = bot.x + bot.dx;
   bot.y = bot.y - bot.dy;
   if (bot.y - bot.r < 0) {
@@ -128,6 +130,7 @@ function checkCollide() {
         (bots[i].x - bots[j].x) ** 2 + (bots[i].y - bots[j].y) ** 2
       );
       if (d <= bots[i].r + bots[j].r) {
+        smacksnd.play();
         if (bots[i].r < bots[j].r) {
           bots[j].r = Math.sqrt(bots[i].r ** 2 + bots[j].r ** 2);
           bots[i].r = 0;
@@ -147,35 +150,25 @@ function checkCollide() {
   }
 }
 setInterval(moveBots, 100);
-
 function dokeydown(e) {
-  console.log(e.key);
-  let stepSize = 2;
-  if (e.key == "ArrowUp") {
-    bots[0].dy = bots[0].dy + stepSize;
-  }
-
+  var stepSize = 2;
   if (e.key == "ArrowRight") {
-    bots[0].dx = bots[0].dx + stepSize;
+    bots[0].dx += stepSize;
   }
-
   if (e.key == "ArrowLeft") {
-    bots[0].dx = bots[0].dx - stepSize;
+    bots[0].dx += -stepSize;
   }
-
+  if (e.key == "ArrowUp") {
+    bots[0].dy += -stepSize;
+  }
   if (e.key == "ArrowDown") {
-    bots[0].dy = bots[0].dy i stepSize;
+    bots[0].dy += - stepSize;
   }
-  //Stop the Bot
-    if (e.key == " ") {
-    bots[0].dy = 0;
-    bots[0].dx = 0;
-    e.stopPropagation();
-  }
+  e.stopPropagation();
 }
 document.addEventListener("keydown", dokeydown);
-
-document.getElementById("resetBots").addEventListener("click", doResetBots);
+resetBots = document.getElementById("resetBots");
+resetBots.addEventListener("click", doResetBots, false);
     </script>
 
   
@@ -183,4 +176,6 @@ document.getElementById("resetBots").addEventListener("click", doResetBots);
 </body>
 
 </html>
+ 
+
  
