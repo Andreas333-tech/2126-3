@@ -164,8 +164,15 @@ function dokeydown(e) {
   if (e.key == "ArrowDown") {
     bots[0].dy = bots[0].dy - stepSize;
   }
-  e.stopPropagation();
+
+    //Stop the Bot
+    if (e.key == " ") {
+    bots[0].dy = 0;
+    bots[0].dx = 0;
+    e.stopPropagation();
+  }
 }
+        
 document.addEventListener("keydown", dokeydown);
 resetBots = document.getElementById("resetBots");
 resetBots.addEventListener("click", doResetBots, false);
