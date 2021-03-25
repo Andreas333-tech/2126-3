@@ -23,7 +23,7 @@
   
 <style>
 #myCanvas{
-  background:#cccccc;
+  background:#ff0000;
 }
 </style>
 
@@ -39,17 +39,25 @@
   <source src="https://math.seattleacademy.org/garyanderson/snd/smack.wav" type="audio/wav">
 </audio>
 
+<audio controls id="death">
+  <source src="https://math.seattleacademy.org/garyanderson/snd/incorrect_sfx.wav" type="audio/wav">
+</audio>
+
+
 <div>
   Bot Count: <span id="botCount">0</span> Deaths: <span id="deaths">0</span>
   <button id="resetBots">Reset Bots</button>
 </div>
-<canvas id="myCanvas" width="600" height="300"></canvas>
+<canvas id="myCanvas" width="600" height="300" style="border:1px solid #500001;"></canvas>
 <img src="#"/>
   
   
       <script id="rendered-js" >
 console.clear();
 const smacksnd = document.getElementById("smack");
+
+const deathsnd =document.getElementById("death");
+
 const c = document.getElementById("myCanvas");
 const ctx = c.getContext("2d");
 let bots = [];
@@ -88,7 +96,7 @@ function drawBot(bot) {
   ctx.lineTo(x, y);
   ctx.stroke();
   if (bot.r == bots[0].r) {
-    ctx.fillStyle = "rgba(255,0,0,.5)";
+    ctx.fillStyle = "rgba(0, 0, 204)";
     ctx.fill();
   }
 }
@@ -130,8 +138,9 @@ function checkCollide() {
         (bots[i].x - bots[j].x) ** 2 + (bots[i].y - bots[j].y) ** 2
       );
       if (d <= bots[i].r + bots[j].r) {
-        smacksnd.play();
+        smacksnd.play(); 
         if (bots[i].r < bots[j].r) {
+          deathsnd.play();
           bots[j].r = Math.sqrt(bots[i].r ** 2 + bots[j].r ** 2);
           bots[i].r = 0;
         }
@@ -159,20 +168,22 @@ function dokeydown(e) {
     bots[0].dx += -stepSize;
   }
   if (e.key == "ArrowUp") {
-    bots[0].dy += -stepSize;
+    bots[0].dy += stepSize;
   }
   if (e.key == "ArrowDown") {
-    bots[0].dy = bots[0].dy - stepSize;
+    bots[0].dy += -stepSize;
   }
+  
 
-    //Stop the Bot
+
+  //Stop the Bot
     if (e.key == " ") {
     bots[0].dy = 0;
     bots[0].dx = 0;
     e.stopPropagation();
   }
 }
-        
+
 document.addEventListener("keydown", dokeydown);
 resetBots = document.getElementById("resetBots");
 resetBots.addEventListener("click", doResetBots, false);
@@ -185,4 +196,3 @@ resetBots.addEventListener("click", doResetBots, false);
 </html>
  
 
- 
